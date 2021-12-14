@@ -1,0 +1,856 @@
+basePath: /
+definitions:
+  helper.BaseResponse:
+    properties:
+      data: {}
+      errors: {}
+      status:
+        type: integer
+    type: object
+  helper.ExampleErrorResponse:
+    properties:
+      email:
+        example: cannot be blank
+        type: string
+      message:
+        example: user bad request
+        type: string
+      password:
+        example: cannot be blank
+        type: string
+    type: object
+  modelcomment.Request:
+    properties:
+      message:
+        example: A Photo
+        type: string
+      photo_id:
+        example: 1
+        type: integer
+    type: object
+  modelcomment.RequestUpdate:
+    properties:
+      message:
+        example: A Photo
+        type: string
+    type: object
+  modelcomment.Response:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      message:
+        type: string
+      photo:
+        properties:
+          caption:
+            type: string
+          id:
+            type: integer
+          photo_url:
+            type: string
+          title:
+            type: string
+          user_id:
+            type: integer
+        type: object
+      photo_id:
+        type: integer
+      user:
+        properties:
+          email:
+            type: string
+          id:
+            type: integer
+          username:
+            type: string
+        type: object
+      user_id:
+        type: integer
+    type: object
+  modelcomment.ResponseInsert:
+    properties:
+      created_at:
+        example: "2021-11-03T01:52:41.035Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      message:
+        example: A Photo
+        type: string
+      photo_id:
+        example: 1
+        type: integer
+      user_id:
+        example: 1
+        type: integer
+    type: object
+  modelcomment.ResponseUpdate:
+    properties:
+      id:
+        example: 1
+        type: integer
+      message:
+        example: A Photo
+        type: string
+      photo_id:
+        example: 1
+        type: integer
+      updated_at:
+        example: "2021-11-03T01:52:41.035Z"
+        type: string
+      user_id:
+        example: 1
+        type: integer
+    type: object
+  modelphoto.Request:
+    properties:
+      caption:
+        example: Beautiful Photo
+        type: string
+      photo_url:
+        example: https://example.com/photo.jpg
+        type: string
+      title:
+        example: A Photo
+        type: string
+    type: object
+  modelphoto.Response:
+    properties:
+      caption:
+        example: Beautiful Photo
+        type: string
+      created_at:
+        example: "2021-11-03T01:52:41.035Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      photo_url:
+        example: https://example.com/photo.jpg
+        type: string
+      title:
+        example: A Photo
+        type: string
+      user_id:
+        example: 1
+        type: integer
+    type: object
+  modelphoto.ResponseGet:
+    properties:
+      caption:
+        example: Beautiful Photo
+        type: string
+      created_at:
+        example: "2021-11-03T01:52:41.035Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      photo_url:
+        example: https://example.com/photo.jpg
+        type: string
+      title:
+        example: A Photo
+        type: string
+      updated_at:
+        example: "2021-11-03T01:52:41.035Z"
+        type: string
+      user:
+        properties:
+          email:
+            example: test@example.com
+            type: string
+          username:
+            example: jhondoe
+            type: string
+        type: object
+    type: object
+  modelphoto.ResponseUpdate:
+    properties:
+      caption:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  modeluser.ExampleRequestUpdate:
+    properties:
+      email:
+        example: test@example.com
+        type: string
+      username:
+        example: jhondoe
+        type: string
+    type: object
+  modeluser.ExampleResponseDelete:
+    properties:
+      message:
+        example: your account has been successfully deleted
+        type: string
+    type: object
+  modeluser.Request:
+    properties:
+      age:
+        example: 23
+        type: integer
+      email:
+        example: test@example.com
+        type: string
+      id:
+        type: integer
+      password:
+        example: password
+        type: string
+      username:
+        example: jhondoe
+        type: string
+    type: object
+  modeluser.RequestLogin:
+    properties:
+      email:
+        example: test@example.com
+        type: string
+      password:
+        example: password
+        type: string
+    type: object
+  modeluser.Response:
+    properties:
+      age:
+        example: 23
+        type: integer
+      email:
+        example: test@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      updated_at:
+        example: "2021-11-03T01:52:41.035Z"
+        type: string
+      username:
+        example: jhondoe
+        type: string
+    type: object
+  modeluser.ResponseLogin:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJxd2Vxd2...
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is API for completing final project 2 hacktiv8
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Hacktiv8 Mygram API
+  version: "1.0"
+paths:
+  /comments:
+    get:
+      consumes:
+      - application/json
+      description: Get comments
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/modelcomment.Response'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Get comments
+      tags:
+      - comments
+    post:
+      consumes:
+      - application/json
+      description: Create a comment
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelcomment.Request'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CREATED
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modelcomment.ResponseInsert'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Create a comment
+      tags:
+      - comments
+  /comments/:commentID:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a comment
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID of the comment
+        in: path
+        name: commentID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Delete a comment
+      tags:
+      - comments
+    put:
+      consumes:
+      - application/json
+      description: Update a comment
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID of the comment
+        in: path
+        name: commentID
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelcomment.RequestUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modelcomment.ResponseUpdate'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Update a comment
+      tags:
+      - comments
+  /photos:
+    get:
+      consumes:
+      - application/json
+      description: GetByUserID a photo
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID of the photo
+        in: path
+        name: photoID
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelphoto.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: SUCCESS
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modelphoto.ResponseGet'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: GetByUserID a photo
+      tags:
+      - photos
+    post:
+      consumes:
+      - application/json
+      description: Create new photo
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelphoto.Request'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CREATED
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modelphoto.Response'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Create new photo
+      tags:
+      - photos
+  /photos/:photoID:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a photo
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID of the photo
+        in: path
+        name: photoID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: SUCCESS
+          schema:
+            $ref: '#/definitions/helper.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Delete a photo
+      tags:
+      - photos
+    put:
+      consumes:
+      - application/json
+      description: Update a photo
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID of the photo
+        in: path
+        name: photoID
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelphoto.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: SUCCESS
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modelphoto.ResponseUpdate'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Update a photo
+      tags:
+      - photos
+  /users:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modeluser.ExampleResponseDelete'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Delete user
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user
+      parameters:
+      - description: Bearer + user token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modeluser.ExampleRequestUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modeluser.Response'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "401":
+          description: Unauthorization
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Update user
+      tags:
+      - users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modeluser.RequestLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modeluser.ResponseLogin'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "404":
+          description: Record not found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Login user
+      tags:
+      - users
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modeluser.Request'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: CREATED
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/modeluser.Response'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+        "409":
+          description: data conflict, like email already exist
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.BaseResponse'
+            - properties:
+                errors:
+                  $ref: '#/definitions/helper.ExampleErrorResponse'
+              type: object
+      summary: Create new user
+      tags:
+      - users
+swagger: "2.0"

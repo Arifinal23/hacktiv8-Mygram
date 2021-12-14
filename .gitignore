@@ -1,0 +1,9 @@
+tmp
+.env
+.env.*
+!.env.example
+
+cover.html
+cover.out
+
+.idea

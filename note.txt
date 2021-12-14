@@ -1,0 +1,2 @@
+service : buat logic nya
+repository : buat query
